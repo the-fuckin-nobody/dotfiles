@@ -1,0 +1,31 @@
+#!/bin/bash
+STATUS=$(acpi | awk '{printf $3}' | tr -d ",")
+BATTERY_PERC=$(acpi | awk '{printf $4}' | tr -d "," | tr -d "%")
+get_icon() {
+	if [[ $BATTERY_PERC -eq "0" ]]; then
+		icon=' '
+	elif [[ ($BATTERY_PERC -ge "0") && ($BATTERY_PERC -le "10") && ($STATUS == "Discharging") ]]; then
+		icon=' '
+	elif [[ ($BATTERY_PERC -ge "10") && ($BATTERY_PERC -le "30") && ($STATUS == "Discharging") ]]; then
+		icon=' '
+	elif [[ ($BATTERY_PERC -ge "30") && ($BATTERY_PERC -le "50") && ($STATUS == "Discharging") ]]; then
+		icon=' '
+	elif [[ ($BATTERY_PERC -ge "50") && ($BATTERY_PERC -le "90") && ($STATUS == "Discharging") ]]; then
+		icon=' '
+	elif [[ ($BATTERY_PERC -ge "90") && ($BATTERY_PERC -le "100") && ($STATUS == "Discharging") ]]; then
+		icon=' '
+	else
+		icon=' '
+	fi
+}
+
+run_cmd() {
+	if [[ ($STATUS == "Charging") ]]; then
+		tooltip="$(acpi | sed -n 's/.* \([0-9]\{2\}\):\([0-9]\{2\}\):\([0-9]\{2\}\) until charged/Time to full: \1h \2h \3s/p')"
+	else
+		tooltip="$(acpi | sed -n 's/.* \([0-9]\{2\}\):\([0-9]\{2\}\):\([0-9]\{2\}\) remaining/Time to empty: \1h \2h \3s/p')"
+	fi
+	get_icon && echo "{\"text\":$BATTERY_PERC, \"icon\":\"$icon\", \"tooltip\":\"$tooltip\"}"
+}
+
+run_cmd

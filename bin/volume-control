@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+## Copyright (C) 2020-1022 Aditya Shakya <adi1090x@gmail.com>
+##
+## Script to manage speaker volume on Archcraft.
+
+# Icons
+iDIR='/usr/share/icons/Fluent-dark/symbolic/status/'
+notify_cmd='notify-send -u low --replace-id=669'
+
+# Get Volume
+get_volume() {
+	echo "$(pulsemixer --get-volume | cut -d ' ' -f1)"
+}
+
+# Get icons
+get_icon() {
+	current="$(get_volume)"
+	if [[ "$current" -eq "0" ]]; then
+		icon="$iDIR/audio-volume-muted-symbolic.svg"
+	elif [[ ("$current" -ge "0") && ("$current" -le "24") ]]; then
+		icon="$iDIR/audio-volume-muted-symbolic.svg"
+	elif [[ ("$current" -ge "25") && ("$current" -le "49") ]]; then
+		icon="$iDIR/audio-volume-low-symbolic.svg"
+	elif [[ ("$current" -ge "50") && ("$current" -le "80") ]]; then
+		icon="$iDIR/audio-volume-medium-symbolic.svg"
+	elif [[ ("$current" -ge "80") && ("$current" -le "100") ]]; then
+		icon="$iDIR/audio-volume-high-symbolic.svg"
+	elif [[ ("$current" -ge "100") ]]; then
+		icon="$iDIR/audio-volume-overamplified-symbolic.svg"
+	fi
+}
+
+# Notify
+notify_user() {
+	${notify_cmd} -h int:value:$(get_volume) -i "$icon" "Volume : $(get_volume)%"
+}
+
+# Increase Volume
+inc_volume() {
+	[[ $(pulsemixer --get-mute) == 1 ]] && pulsemixer --unmute
+	pulsemixer --max-volume 150 --change-volume +1 && get_icon && notify_user
+}
+
+# Decrease Volume
+dec_volume() {
+	[[ $(pulsemixer --get-mute) == 1 ]] && pulsemixer --unmute
+	pulsemixer --max-volume 150 --change-volume -1 && get_icon && notify_user
+}
+
+# Toggle Mute
+toggle_mute() {
+	if [[ $(pulsemixer --get-mute) == 0 ]]; then
+		pulsemixer --toggle-mute && ${notify_cmd} -i "$iDIR/audio-volume-muted-blocking-symbolic.svg" "Mute"
+	else
+		pulsemixer --toggle-mute && get_icon && ${notify_cmd} -i "$icon" "Unmute"
+	fi
+}
+
+# Toggle Mic
+toggle_mic() {
+	ID="$(pulsemixer --list-sources | grep 'Default' | cut -d',' -f1 | cut -d' ' -f3)"
+	if [[ $(pulsemixer --id $ID --get-mute) == 0 ]]; then
+		pulsemixer --id ${ID} --toggle-mute && ${notify_cmd} -i "$iDIR/microphone-hardware-disabled-symbolic.svg" "Microphone Switched OFF"
+	else
+		pulsemixer --id ${ID} --toggle-mute && ${notify_cmd} -i "$iDIR/microphone.png" "Microphone Switched ON"
+	fi
+}
+
+# Execute accordingly
+if [[ -x $(which pulsemixer) ]]; then
+	if [[ "$1" == "--get" ]]; then
+		get_volume
+	elif [[ "$1" == "--inc" ]]; then
+		inc_volume
+	elif [[ "$1" == "--dec" ]]; then
+		dec_volume
+	elif [[ "$1" == "--toggle" ]]; then
+		toggle_mute
+	elif [[ "$1" == "--toggle-mic" ]]; then
+		toggle_mic
+	else
+		echo $(get_volume)%
+	fi
+else
+	${notify_cmd} "'pulsemixer' is not installed."
+fi

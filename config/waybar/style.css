@@ -1,0 +1,406 @@
+@import "mocha.css";
+
+* {
+    /* `otf-font-awesome` is required to be installed for icons */
+    font-family: "IosevkaTerm NFP", "icomoon-feather", "typicons";
+    font-size: 15px;
+    margin-top: 4px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 0px;
+}
+
+window#waybar {
+    background: transparent;    
+    transition-duration: 0.5s;
+}
+
+window#waybar.hidden {
+    padding-top: 20px;
+    background: transparent;
+}
+
+
+window#waybar.empty {
+    background: transparent;
+    padding-top: 20px;
+}
+window#waybar.solo {
+    background: transparent;
+    padding-top: 20px;
+}
+
+
+button {
+    /* Use box-shadow instead of border so the text isn't offset */
+    /* box-shadow: inset 0 -3px transparent; */
+    /* Avoid rounded borders under each button name */
+    background: @crust;
+    border: none;
+    
+    /* border-radius: 0px; */
+}
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+    background: inherit;
+    /* box-shadow: inset 0 -3px #ffffff; */
+    border-radius: 0px;
+    
+}
+
+#workspaces button {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 0 2px;
+    color: @lavender;
+    /* background: @crust; */
+    background: transparent;
+    border-radius: 0px;
+    border-bottom: 1px transparent;
+    
+}
+#workspaces button.visible {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    color: @lavender;
+    /* background: @crust; */
+    background: transparent;
+    border-radius: 0px;
+    border-bottom: 1px transparent;
+}
+
+#workspaces button.focused {
+    color: @teal;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    background: transparent;
+    /* box-shadow: inset 0px -2px 0px 0px @teal; */
+    border-bottom: 3px solid @teal;
+    border-radius: 0px;
+}
+
+#workspaces button.urgent {
+    color: @red;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-bottom: 3px solid @red;
+    background: transparent;
+
+    border-radius: 0px;
+}
+
+#workspaces button.focused:hover {
+    color: @teal;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-bottom: 3px solid @teal;
+    background: transparent;
+    border-radius: 0px;
+}
+
+#workspaces button:hover {
+    background: transparent;
+    color: @lavender;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-bottom: 3px solid @lavender;
+
+    border-radius: 0px;
+}
+
+
+#mode {
+    background-color: rgba(49, 50, 68, 0.314);
+}
+
+#workspaces {
+    margin: 0 5px;
+    padding: 0 5px;
+    background: @crust;
+    border-radius: 8px;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#custom-packages,
+#custom-launcher,
+#custom-sysmenu,
+#custom-memory,
+tooltip,
+#window,
+#mpd {
+    padding: 0 10px;
+    color: @text;
+    border-radius: 8px;
+    font-family: "IosevkaTerm NFP";
+    font-size: 14px;
+    margin-top: 0px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#window {
+    background-color: @crust;
+    padding: 0 10px;
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+#clock {
+    background-color: @crust;
+    color: @text;
+}
+
+#battery {
+    background-color: @crust;
+    color: @text;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    margin-left: 0px;
+}
+
+#battery.charging, #battery.plugged {
+    color: @text;
+    background-color: @crust;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    margin-left: 0px;
+}
+
+@keyframes blink {
+    to {
+        background-color: @crust;
+        color: @text;
+    }
+}
+
+#battery.critical:not(.charging) {
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    background-color: @crust;
+    color: @red;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    margin-left: 0px;
+    font-size: 14px;
+}
+
+label:focus {
+    background-color: #000000;
+}
+
+#cpu {
+    background-color: @crust;
+    color: @text;
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+    margin-right: 0px;
+}
+#cpu:hover {
+    background-color: @red;
+    color: @text;
+    margin-left: 0px;
+}
+#memory {
+    background-color: @mantle;
+    color: @text;
+}
+
+#disk {
+    background-color: @crust;
+    color: @text;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    margin-left: 0px;
+}
+
+#backlight {
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+    background-color: @crust;
+    margin-left: 0px;
+    margin-right: 0px;
+    color: @text;
+}
+
+#network {
+    background-color: @crust;
+    color: @text;
+    margin-left: 0px;
+}
+
+#network.disconnected {
+    background-color: @crust;
+    margin-left: 0px;
+    color: @red;
+
+}
+
+#pulseaudio {
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+    background-color: @crust;
+    color: @text;
+    margin-right: 0px;
+}
+
+#pulseaudio.muted {
+    background-color: @crust;
+    color: @red;
+}
+
+#wireplumber {
+    background-color: #fff0f5;
+    color: #000000;
+}
+
+#wireplumber.muted {
+    background-color: #f53c3c;
+}
+
+#tray {
+    background-color: @crust;
+    color: inherit;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @crust;
+    color: @red;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#idle_inhibitor {
+    background-color: @crust;
+    color: @overlay2;
+    padding: 0 12px;
+}
+
+#idle_inhibitor.activated {
+    background-color: @crust;
+    color: @green;
+    padding: 0 12px;
+
+}
+
+#language {
+    background: #00b093;
+    color: #740864;
+    padding: 0 10px;
+    margin: 0 10px;
+    min-width: 16px;
+}
+
+#scratchpad {
+    background: @crust;
+    margin-right: 5px;
+}
+
+#scratchpad.empty {
+	background-color: transparent;
+}
+
+#custom-memory {
+    background-color: @crust;
+    color: @text;
+    padding: 0 10px;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    margin-left: 0px;
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+    margin-right: 0px;
+}
+
+#custom-packages {
+    background: @crust;
+    color: @text;
+    padding: 0 10px;
+}
+
+#custom-sysmenu {
+    background: @crust;
+    color: @red;
+    font-size: 17px;
+    padding: 0 10px;
+    margin-right: 0px;
+}
+
+#custom-launcher {
+    font-size: 18px;
+    background: @crust;
+    color: @sapphire;
+    margin-left: 0px;
+    margin-top: 0px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+#custom-battery-status {
+    background: @crust;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    color: @text;
+}
+tooltip {
+    border: 1px solid @lavender;
+    border-radius: 8px;
+    background: @crust;
+    color: @text;
+    margin: 0px;
+    font-size: 14px;
+    margin: 0px;
+}
+
+

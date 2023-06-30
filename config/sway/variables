@@ -1,0 +1,94 @@
+set $mod Mod4
+set $alt Mod1
+
+# Set program names
+set $term foot
+set $browser chromium
+set $code code
+set $menu swaymsg exec "wofi --show drun -I --width 500 --height 300"
+set $emoji swaymsg exec "wofi-emoji"
+# Set colors
+set $rosewater #f5e0dc
+set $flamingo  #f2cdcd
+set $pink      #f5c2e7
+set $mauve     #cba6f7
+set $red       #f38ba8
+set $maroon    #eba0ac
+set $peach     #fab387
+set $green     #a6e3a1
+set $teal      #94e2d5
+set $sky       #89dceb
+set $sapphire  #74c7ec
+set $blue      #89b4fa
+set $lavender  #b4befe
+set $text      #cdd6f4
+set $subtext1  #bac2de
+set $subtext0  #a6adc8
+set $overlay2  #9399b2
+set $overlay1  #7f849c
+set $overlay0  #6c7086
+set $surface2  #585b70
+set $surface1  #45475a
+set $surface0  #313244
+set $base      #1e1e2e
+set $mantle    #181825
+set $crust     #11111b
+# 󰡵 󰡴 󰡳
+
+
+# Set workspace related variables
+set $ws1_icon ﲵ #terminal apps
+set $ws2_icon  #web browser
+set $ws3_icon ﱮ #file manager
+set $ws4_icon  #code editor
+set $ws5_icon  #office
+set $ws6_icon  #chats and messaging
+set $ws7_icon 磊 #media
+set $ws8_icon 󰋫 #photos
+set $ws9_icon  #settings
+
+set $ws1 1:$ws1_icon
+set $ws2 2:$ws1_icon
+set $ws3 3:$ws1_icon
+set $ws4 4:$ws1_icon
+set $ws5 5:$ws1_icon
+set $ws6 6:$ws1_icon
+set $ws7 7:$ws1_icon
+set $ws8 8:$ws1_icon
+set $ws9 9:$ws1_icon
+
+
+# Set input and output related variables
+set $motinor 'eDP-1'
+set $touchpad '10182:480:GXTP7863:00_27C6:01E0_Touchpad'
+set $keyboard '1:1:AT_Translated_Set_2_keyboard'
+set $mouse '10182:480:GXTP7863:00_27C6:01E0_Mouse'
+set $power_button 'Power Button'
+set $lid_switch 'Lid Switch'
+
+# Set gaps
+set $inner_gap 10
+set $outer_gap 0
+
+# Set keybindings
+set $screenshot_key Print
+set $screenshot_area_key Shift+Print
+set $screenshot_window_key Ctrl+Print
+set $emoji_key $mod+period
+set $menu_key $mod+d
+set $browser_key $mod+Shift+w
+set $code_key $mod+Shift+c
+set $term_key $mod+Return
+set $ws1_key $mod+1
+set $ws2_key $mod+2
+set $ws3_key $mod+3
+set $ws4_key $mod+4
+set $ws5_key $mod+5
+set $ws6_key $mod+6
+set $ws7_key $mod+7
+set $ws8_key $mod+8
+set $ws9_key $mod+9
+
+
+
+set $wallpaper ~/.config/sway/wallpaper.jpg

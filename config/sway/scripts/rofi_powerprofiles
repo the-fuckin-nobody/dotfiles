@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Get the current power profile
+current_profile=$(powerprofilesctl get)
+
+# Define the options for Rofi
+options="performance\nbalanced\npower-saver"
+
+# Show Rofi and get the selected option
+selected_option=$(echo -e "$options" | rofi -dmenu -theme ~/.config/rofi/power_profiles.rasi -p "Select the profile : " -no-custom -selected-row $(echo -e "performance\nbalanced\npower-saver" | grep -i "$current_profile" -n | cut -d ':' -f 1 | awk '{print $1-1}'))
+
+icon="~/.config/bspwm/scripts/$selected_option.svg"
+dunstify -i $icon --replace=122 "Power Profile set to: $selected_option"
+# Set the selected power profile
+powerprofilesctl set $selected_option

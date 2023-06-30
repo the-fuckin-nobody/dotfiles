@@ -1,0 +1,15 @@
+#!/bin/bash
+
+get_color() {
+	slurp -p -b "#00000000" | grim -g - -
+}
+
+extract_hex_code() {
+	convert - txt: | tr -d "\n" | cut -d " " -f8 | tr -d "\n"
+}
+
+run_cmd() {
+	get_color | extract_hex_code | wl-copy && wl-paste
+}
+
+run_cmd

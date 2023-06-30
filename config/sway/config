@@ -1,0 +1,272 @@
+#Set variables 
+# Set colors 
+set $mod Mod4
+
+include themes/catppuccin-mocha/colors
+
+# Set wallpaper
+#exec swaybg '--image=/home/dex/.config/sway/wallpapers/pexels-cmonphotography-1809644.jpg' --mode=fill
+
+# Set scale
+output "eDP-1" {
+    scale 1.25
+    scale_filter smart
+    subpixel rgb
+    adaptive_sync on
+    bg /home/dex/.config/sway/wallpapers/wallpaper\(4\).png stretch
+
+}
+
+# Touchpad configuration
+input "10182:480:GXTP7863:00_27C6:01E0_Touchpad" {
+    dwt enabled
+    accel_profile adaptive
+    drag enabled
+    pointer_accel 0.5
+    tap_button_map lrm
+    tap enabled 
+    natural_scroll enabled
+    middle_emulation enabled
+}
+
+# Idle configuration
+exec swayidle timeout 300 'swaylock --config=/home/dex/.config/swaylock/mocha.conf --indicator-caps-lock --daemonize --ignore-empty-password'\
+    timeout 400 'swaymsg "output eDP-1 disable"' resume 'swaymsg "output eDP-1 enable"'\
+    before-sleep 'swaylock --config=/home/dex/.config/swaylock/mocha.conf --indicator-caps-lock --daemonize --ignore-empty-password'
+
+#exec_always 'if `cat /proc/acpi/button/lid/LID0/state | cut ":" -d -f1 | tr -d " "`; then swaymsg output eDP-1 enable; else swaymsg output eDP-1 disable; fi'
+# bindswitch --reload --locked lid:off output eDP-1 enable 
+# bindswitch --reload --locked lid:on output eDP-1 disable
+exec --no-startup-id dbus-update-activation-environment --all
+
+# Set border
+for_window [title=".*"] border pixel 2
+#Set gaps
+gaps inner 10px
+gaps outer 0px
+
+# Set font
+font pango:Iosevka Nerd Font Mono 12
+
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+# Reload the configuration file
+bindsym Ctrl+Shift+r reload
+bindsym $mod+c kill
+
+
+# Set program names
+set $term foot
+set $browser qutebrowser
+set $code code
+set $menu rofi_launcher
+set $emoji rofi_emoji
+set $file_manager dolphin
+set $networkmenu networkmanager_dmenu
+set $screenshot rofi_screenshot
+set $run rofi_runner
+set $windows rofi_windows
+set $powermenu rofi_powermenu
+set $mute_key XF86AudioMute
+set $vol_up_key XF86AudioRaiseVolume
+set $vol_down_key XF86AudioLowerVolume
+set $brightness_up_key XF86MonBrightnessUp
+set $brightness_down_key XF86MonBrightnessDown
+
+# Set workspace related variables
+set $ws1_icon 
+set $ws2_icon 
+set $ws3_icon 
+set $ws4_icon 
+set $ws5_icon 
+set $ws6_icon 
+set $ws7_icon 󰑈
+set $ws8_icon 
+
+# set $ws1_icon 𑁒
+# set $ws2_icon 𑁓
+# set $ws3_icon 𑁔
+# set $ws4_icon 𑁕
+# set $ws5_icon 𑁖
+# set $ws6_icon 𑁗
+# set $ws7_icon 𑁘
+# set $ws8_icon 𑁙
+
+
+set $ws1 1:$ws1_icon
+set $ws2 2:$ws2_icon
+set $ws3 3:$ws3_icon
+set $ws4 4:$ws4_icon
+set $ws5 5:$ws5_icon
+set $ws6 6:$ws6_icon
+set $ws7 7:$ws7_icon
+set $ws8 8:$ws8_icon
+
+# Set keybindings
+# Set mod key
+set $mod Mod4
+#
+
+# Set keybindings for workspaces
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+
+# Set keybindings for moving containers
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+
+# Set keybindings for moving focus
+bindsym $mod+Left focus left
+bindsym $mod+Right focus right
+bindsym $mod+Up focus up
+bindsym $mod+Down focus down
+
+# Set keybindings for moving containers
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Down move down
+
+# 2.6 Set keybindings for resizing containers
+bindsym $mod+Ctrl+Left resize shrink width 10 px or 10 ppt
+bindsym $mod+Ctrl+Right resize grow width 10 px or 10 ppt
+bindsym $mod+Ctrl+Up resize shrink height 10 px or 10 ppt
+bindsym $mod+Ctrl+Down resize grow height 10 px or 10 ppt
+
+# Move focus to the next/previous workspace
+bindsym alt+ctrl+Right workspace next
+bindsym alt+ctrl+Left workspace prev
+
+
+# Set keybindings for moving containers to the next/previous workspace
+bindsym alt+ctrl+Shift+Right move container to workspace next
+bindsym alt+ctrl+Shift+Left move container to workspace prev
+
+# Set keybindings for programs and commands
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+w exec $browser
+bindsym $mod+Shift+c exec $code
+bindsym $mod+Shift+f exec $file_manager
+bindsym $mod+period exec $emoji
+bindsym $mod+n exec $networkmenu
+bindsym $mod+d exec $menu
+bindsym $mod+s exec $screenshot
+bindsym $mod+x exec $powermenu
+bindsym $mod+w exec $windows
+bindsym $mod+r exec $run
+bindsym $mute_key exec volume-control --toggle
+bindsym $vol_up_key exec volume-control --inc
+bindsym $vol_down_key exec volume-control --dec
+bindsym $brightness_up_key exec brightness-control --inc
+bindsym $brightness_down_key exec brightness-control --dec
+bindsym print exec screenshot --full
+
+
+
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Set gtk theme
+exec_always gsettings set org.gnome.desktop.interface {
+    gtk-theme 'Catppuccin-Mocha-Standard-Lavender-Dark'
+    icon-theme 'Fluent-dark'
+    cursor-theme 'Catppuccin-Mocha-Dark-Cursors'
+    font-name 'IosevkaTerm NFP Medium 11'
+    cursor-blink true
+    cursor-size 24
+}
+
+seat seat0 xcursor_theme Catppuccin-Mocha-Dark-Cursors 24
+# Set rules for various programs
+# 1. Set rules for windows
+
+# Focus the newly opened windows
+for_window [urgent="latest"] focus
+for_window [app_id="foot|alacritty|kitty"] focus
+for_window [app_id="chromium|firefox|google-chrome|org.qutebrowser.qutebrowser"] focus
+for_window [app_id="dolphin|thunar|ranger"] focus
+for_window [app_id="code-url-handler|nvim.*|vim.*"] focus
+for_window [app_id="libreoffice"] focus
+for_window [app_id="discord|telegram-desktop|signal-desktop"] focus
+for_window [app_id="vlc|mpv"] focus
+for_window [app_id="kvantummanager|qt5ct|qt6ct"] focus
+for_window [app_id="org.telegram.desktop"] focus
+for_window [app_id="docnf-editor|pavucontrol"] focus
+
+
+
+# Floating windows
+for_window [app_id="org.kde.polkit-kde-authentication-agent-1"] floating enable
+for_window [title="Save As"] floating enable
+for_window [title="Copying.*"] floating enable
+for_window [title="Move.*"] floating enable
+for_window [title="Moving.*"] floating enable
+for_window [title="Open File"] floating enable
+for_window [title="Open.*"] floating enable
+for_window [title="Save.*"] floating enable
+for_window [title="Sign In.*|Library"] floating enable
+for_window [title="Transferring.*"] floating enable
+for_window [title="zip.*|extract.*|Extract.*|unzip.*"] floating enable
+for_window [title="New Text Note — Okular"] floating enable
+for_window [title="Select.*"] floating enable
+for_window [app_id="swayimg.*"] floating enabled
+for_window [app_id="swayimg.*"] border pixel 0
+
+# Assign workspaces to programs
+assign [title="foot|~"] $ws1
+assign [app_id="chromium|firefox|google-chrome|org.qutebrowser.qutebrowser"] $ws2
+assign [app_id="ark|dolphin|thunar"] $ws3
+assign [app_id="code-url-handler|nvim.*|vim.*"] $ws4
+assign [title="nvim"] $ws4
+assign [app_id="libreoffice|okular|evince"] $ws5
+assign [app_id="discord|org.telegram.desktop|signal-desktop"] $ws6
+assign [app_id="vlc|mpv|.*obs.*"] $ws7
+assign [app_id="kvantummanager|qt5ct|qt6ct|.*settings.*|docnf-editor|pavucontrol"] $ws8
+
+
+bindsym $mod+b splith
+bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+alt+s layout stacking toggle
+bindsym $mod+alt+w layout tabbed toggle
+bindsym $mod+alt+e layout toggle split
+bindsym $mod+alt+f layout toggle float
+# toggle tiled layout
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# Move focus to the parent container
+bindsym $mod+a focus parent
+
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
+
+
+# Startup apps
+exec_always --no-startup-id "sh -c ~/.config/sway/bin/autostart.sh"

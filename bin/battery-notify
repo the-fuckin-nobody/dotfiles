@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# Battery percentage at which to notify
+WARNING_LEVEL=30
+BATTERY_DISCHARGING=`acpi -b | grep "Battery 0" | grep -c "Discharging"`
+BATTERY_LEVEL=`acpi -b | grep "Battery 0" | grep -P -o '[0-9]+(?=%)'`
+
+# Use two files to store whether we've shown a notification or not (to prevent multiple notifications)
+EMPTY_FILE=/tmp/batteryempty
+FULL_FILE=/tmp/batteryfull
+
+# Reset notifications if the computer is charging/discharging
+if [ $BATTERY_DISCHARGING -eq 1 ] && [ -f $FULL_FILE ]; then
+    rm $FULL_FILE
+elif [ $BATTERY_DISCHARGING -eq 0 ] && [ -f $EMPTY_FILE ]; then
+    rm $EMPTY_FILE
+fi
+
+get_icon() {
+    BATTERY_LEVEL=`acpi -b | grep "Battery 0" | grep -P -o '[0-9]+(?=%)'`
+    if [[ ("$BATTERY_LEVEL" -ge "0") && ("$BATTERY_LEVEL" -le "10") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-caution-symbolic.svg'
+    elif [[ ("$BATTERY_LEVEL" -ge "10") && ("$BATTERY_LEVEL" -le "19") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-10-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "20") && ("$BATTERY_LEVEL" -le "29") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-20-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "30") && ("$BATTERY_LEVEL" -le "39") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-30-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "40") && ("$BATTERY_LEVEL" -le "49") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-40-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "50") && ("$BATTERY_LEVEL" -le "59") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-50-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "60") && ("$BATTERY_LEVEL" -le "69") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-60-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "70") && ("$BATTERY_LEVEL" -le "79") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-70-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "80") && ("$BATTERY_LEVEL" -le "89") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-80-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "90") && ("$BATTERY_LEVEL" -le "99") ]]; then
+		icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-90-symbolic.svg'
+    elif [[ ("$BATTERY_LEVEL" -eq "100") ]]; then
+        icon='/usr/share/icons/Fluent-dark/symbolic/status/battery-level-100-symbolic.svg'
+	fi
+}
+notify() {
+	WARNING_LEVEL=30
+	BATTERY_DISCHARGING=`acpi -b | grep "Battery 0" | grep -c "Discharging"`
+	TIME_EMPTY=`acpi | sed 's/.* \([0-9]\+:[0-9]\+:[0-9]\+\) remaining/\1/' | awk -F: '{ printf "%dh %dm %ds remaining\n", $1, $2, $3 }'`
+	BATTERY_LEVEL=`acpi -b | grep "Battery 0" | grep -P -o '[0-9]+(?=%)'`
+	if [[ ("$BATTERY_LEVEL" -gt "95") && ("$BATTERY_DISCHARGING" -eq "0") && (! -f "$FULL_FILE") ]]; then
+		get_icon && dunstify -i "$icon" "Battery ${BATTERY_LEVEL}% Charged" -r 9991
+    	touch $FULL_FILE
+	elif [[ ("$BATTERY_LEVEL" -le "$WARNING_LEVEL") && ("$BATTERY_DISCHARGING" -eq "1") && (! -f "$EMPTY_FILE") ]]; then
+		get_icon && dunstify -i "$icon" "${BATTERY_LEVEL}% Battery!" "$TIME_EMPTY" -u critical -r 9991
+    	touch $EMPTY_FILE
+	fi
+}
+
+`/usr/local/bin/charging-notify`
+echo `acpi | cut -d " " -f 4 | cut -d "," -f 1`
+notify
+# # If the battery is charging and is full (and has not shown notification yet)
+# if [[ ("$BATTERY_LEVEL" -gt "95" ) && ("$BATTERY_DISCHARGING" -eq "0") && (! -f "$FULL_FILE" ) ]]; then
+# 	echo "Hello"
+#     get_icon && notify-send -i "$icon" "Battery ${BATTERY_LEVEL}% Charged" -r 9991
+#     touch $FULL_FILE
+# # If the battery is low and is not charging (and has not shown notification yet)
+# elif [[ ($BATTERY_LEVEL -le $WARNING_LEVEL) && [ $BATTERY_DISCHARGING -eq "1" ] && [ ! -f $EMPTY_FILE ]]; then
+#     get_icon && notify-send -i "$icon" "Low Battery" "${BATTERY_LEVEL}% of battery remaining." -u critical -r 9991
+#     touch $EMPTY_FILE
+# fi

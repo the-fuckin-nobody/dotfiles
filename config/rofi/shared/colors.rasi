@@ -1,0 +1,23 @@
+* {
+transparent:    #00000000;
+background: rgb(30, 30, 46); //base 
+//background:     rgba(17, 17, 27); //crust
+// background:     rgba(24, 24, 37); //mantle
+//background:   #11111b;
+background-alt: #2a2b3c;
+foreground:     #cdd6f4;
+blue:           #89b4fa;
+selected:       #b4befe;
+sapphire:       #74c7ec;
+sky:            #89dceb;
+teal:           #94e2d5;
+active:         #a6e3a1;
+yellow:         #f9e2af;
+peach:          #fab387;
+maroon:         #eba0ac;
+urgent:         #f38ba8;
+mauve:          #cba6f7;
+pink:           #f5c2e7;
+flamingo:       #f2cdcd;
+rosewater:      #f5e0dc;
+}

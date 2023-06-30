@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+BASE_DIR="~/.config/sway/"
+ROFI_THEMES_DIR="~/.config/rofi/themes"

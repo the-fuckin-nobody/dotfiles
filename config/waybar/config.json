@@ -1,0 +1,232 @@
+{
+    "layer": "bottom",
+    "height": 31,
+    "spacing": 0,
+    "position": "top",
+    "mod": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "modules-left": [
+        "custom/launcher",
+        "sway/workspaces",
+        "sway/mode",
+        "cpu",
+        "custom/memory",
+        "disk",
+        "sway/window"
+    ],
+    "modules-center": [
+        "idle_inhibitor",
+        "clock",
+        "custom/packages"
+    ],
+    "modules-right": [
+        "sway/scratchpad",
+        "network",
+        "pulseaudio",
+        "backlight",
+        "battery",
+        "tray",
+        "custom/sysmenu"
+    ],
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": true,
+        "format": "{name}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "󰑈",
+            "8": ""
+        }
+    },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 15,
+        "tooltip": true,
+        "rewrite": {
+            "(.*) - (.*)": "$1"
+        },
+        "tooltip-format": "{title}",
+        "icon": true,
+        "icon-size": 24
+    },
+    "sway/mode": {
+        "format": " {}"
+    },
+    "sway/scratchpad": {
+        "format": "<span foreground='#a6e3a1'>{icon}</span> <b>{count}</b>",
+        "show-empty": false,
+        "format-icons": [
+            "",
+            ""
+        ],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        "icon-size": 20
+    },
+    "clock": {
+        "timezone": "Asia/Kolkata",
+        "format": "<span foreground='#89b4fa' font=\"IosevkaTerm NFP 14\"> </span>{:%Hh %Mm %Ss}",
+        "interval": 1,
+        "tooltip-format": "<big><b><span foreground='#89b4fa' font=\"IosevkaTerm NFP 14\">󰃭 </span><span foreground='#cdd6f4'> {:%B %d %Y}</span></b></big>\n<tt><span foreground='#cdd6f4' font=\"JetBrainsMono Nerd Font 10\">{calendar}</span></tt>",
+        "today-format": "<b><u><span foreground='#a6e3a1'>{}</span></u></b>",
+        "format-alt": "<span foreground='#89b4fa' font=\"IosevkaTerm NFP 14\">󰃭 </span>{:%b-%d-%Y}"
+    },
+    "cpu": {
+        "interval": 2,
+        "on-click": "foot -e btop",
+        "format": "<span foreground='#f38ba8' font=\"IosevkaTerm NFP Medium 13\"> </span>{usage}%",
+        "tooltip": true
+    },
+    "memory": {
+        "format": "{}% "
+    },
+    "backlight": {
+        "on-scroll-up": "brightness-control --dec",
+        "on-scroll-down": "brightness-control --inc",
+        "scroll-step": 5,
+        "device": "intel_backlight",
+        "format": "<span foreground='#94e2d5'><big><b>{icon}</b></big></span>{percent}%",
+        "format-icons": [
+            "󱩏 ",
+            "󱩐 ",
+            "󱩑 ",
+            "󱩒 ",
+            "󱩓 ",
+            "󱩔 ",
+            "󱩕 ",
+            "󱩖 ",
+            "󰛨 "
+        ]
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 40,
+            "critical": 19
+        },
+        "interval": 2,
+        "format": "<big>{icon}</big>{capacity}%",
+        "format-charging": "<span foreground='#a6e3a1' font=\"IosevkaTerm NFP 10\"> </span>{capacity}%",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "<big>{icon}</big> {time}",
+        "format-icons": [
+            "<span foreground='#f38ba8'> </span>",
+            "<span foreground='#f38ba8'> </span>",
+            "<span foreground='#eba0ac'> </span>",
+            "<span foreground='#eba0ac'> </span>",
+            "<span foreground='#fab387'> </span>",
+            "<span foreground='#fab387'> </span>",
+            "<span foreground='#f9e2af'> </span>",
+            "<span foreground='#f9e2af'> </span>",
+            "<span foreground='#a6e3a1'> </span>",
+            "<span foreground='#a6e3a1'> </span>"
+        ]
+    },
+    "network": {
+        "interval": 1,
+        "interface": "wlan0",
+        "format-wifi": "<span foreground='#b4befe'><big>{icon}</big></span>{essid} <span foreground='#a6e3a1'><big>󰓢</big></span> {bandwidthTotalBytes}",
+        "format-ethernet": "{ipaddr}/{cidr} <span foreground='#b4befe'></span>",
+        "tooltip-format": "<span foreground='#b4befe'><big>{icon}</big></span>{essid} ({signalStrength}%)",
+        "tooltip-format-disconnected": "<span foreground='#f38ba8'><big>󰤭  </big>Offline</span>",
+        "format-linked": "{ifname} (No IP) <span foreground='#b4befe'></span>",
+        "format-disconnected": "<big>󰤭 </big>Offline",
+        "format-icons": [
+            "󱛏 ",
+            "󱛋 ",
+            "󱛌 ",
+            "󱛍 ",
+            "󱛎 "
+        ],
+        "on-click": "networkmanager_dmenu"
+    },
+    "pulseaudio": {
+        "scroll-step": 1,
+        "format": "<span foreground='#74c7ec'>{icon}</span>{volume}%",
+        "format-bluetooth": "{volume}% {icon}<big></big> {format_source}",
+        "format-bluetooth-muted": " {icon}<big></big> {format_source}",
+        "format-muted": "<span font=\"IosevkaTerm NFP 15\">󰝟 </span>Mute",
+        "format-source": "{volume}%",
+        "format-source-muted": "<span foreground='#f38ba8'></span>",
+        "format-icons": {
+            "headphone": "<big>󰋋 </big>",
+            "headphone-muted": "󰟎 ",
+            "hands-free": " ",
+            "headset": " ",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "<span font=\"IosevkaTerm NFP 14\">󰕿 </span>",
+                "<span font=\"IosevkaTerm NFP 14\">󰖀 </span>",
+                "<span font=\"IosevkaTerm NFP 14\">󰕾 </span>"
+            ]
+        },
+        "on-click": "volume-control --toggle"
+    },
+    "disk": {
+        "interval": 30,
+        "format": "<span foreground='#fab387' font=\"IosevkaTerm NFP Medium 10\"></span> {free}",
+        "tooltip": true,
+        "tooltip-format": "{used} used of {total}"
+    },
+    "custom/memory": {
+        "format": "<span foreground='#eba0ac' font=\"IosevkaTerm NFP Medium 14\">{icon}</span> {}GiB",
+        "format-icons": [
+            "󰄦"
+        ],
+        "tooltip-format": "{tooltip}",
+        "exec": "mem-info",
+        "return-type": "json",
+        "interval": 1,
+        "on-click": "foot -e btop"
+    },
+    "custom/packages": {
+        "format": "<span foreground='#a6e3a1' font=\"IosevkaTerm NFP Medium 11\"><big>{icon}</big></span> {}",
+        "format-icons": [
+            "󰚰"
+        ],
+        "tooltip-format": "{tooltip}",
+        "exec": "count-packages",
+        "signal": 8,
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "foot -e sudo pacman -Syyu"
+    },
+    "custom/sysmenu": {
+        "format": "<big>{icon}</big>",
+        "format-icons": [
+            "󰐥"
+        ],
+        "tooltip-format": "{tooltip}",
+        "exec": "echo '{\"text\":\"PowerMenu\", \"tooltip\":\"Power Menu\"}'",
+        "on-click": "rofi_powermenu",
+        "return-type": "json"
+    },
+    "custom/launcher": {
+        "format": "<big>{icon}</big>",
+        "format-icons": [
+            ""
+        ],
+        "tooltip-format": "{tooltip}",
+        "exec": "echo '{\"text\":\"Apps\", \"tooltip\":\"<big> </big>Application Launcher\"}'",
+        "on-click": "rofi_launcher",
+        "return-type": "json"
+    }
+}

@@ -1,0 +1,14 @@
+* {
+    transparent:    #00000000;
+    background-alt: rgb(49, 50, 68);
+    // background:     rgb(24, 24, 37);
+    // background:     #11111b;
+    background:     rgb(30, 30, 46);
+    foreground:     #cdd6f4;
+    pink:           #f5c2e7;
+    active:         #94e2d5;
+    urgent:         #f38ba8;
+    blue:           #89b4fa;
+    yellow:         #f9e2af;
+    selected:       #b4befe;
+}

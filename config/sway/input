@@ -1,0 +1,24 @@
+
+# Touchpad configuration
+input "10182:480:GXTP7863:00_27C6:01E0_Touchpad" {
+    dwt enabled
+    accel_profile adaptive
+    drag enabled
+    pointer_accel 0.5
+    tap_button_map lrm
+    tap enabled
+    natural_scroll enabled
+    middle_emulation enabled
+    disable_when_usb_present "10182:480:GXTP7863:00_27C6:01E0_Mouse"
+}
+
+# Keyboard configuration
+input "1:1:AT_Translated_Set_2_keyboard" {
+    xkb_layout us
+}
+
+# Mouse configuration
+input "10182:480:GXTP7863:00_27C6:01E0_Mouse" {
+    dpi 1000
+}
+

@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# Send a notification displaying that the battery is charging or discharging
+# Pass 1 as an argument for charging, 0 for discharging
+# Example usage: chargingnotify 1
+
+# Check if argument is passed
+
+BATTERY_CHARGING=$(acpi | grep -c "Charging")
+BATTERY_LEVEL=$(acpi -b | grep "Battery 0" | grep -P -o '[0-9]+(?=%)')
+
+CHARGING_FILE='/home/dex/.battery-charging'
+DISCHARGING_FILE='/home/dex/.battery-discharging'
+
+if [ $BATTERY_CHARGING -eq 1 ] && [ -f $DISCHARGING_FILE ]; then
+	rm $DISCHARGING_FILE
+elif [ $BATTERY_CHARGING -eq 0 ] && [ -f $CHARGING_FILE ]; then
+	rm $CHARGING_FILE
+fi 
+
+get_icon() {
+    BATTERY_LEVEL=`acpi -b | grep "Battery 0" | grep -P -o '[0-9]+(?=%)'`
+    if [[ ("$BATTERY_LEVEL" -ge "0") && ("$BATTERY_LEVEL" -le "10") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-empty-charging-symbolic.svg'
+    elif [[ ("$BATTERY_LEVEL" -ge "10") && ("$BATTERY_LEVEL" -le "19") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-10-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "20") && ("$BATTERY_LEVEL" -le "29") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-20-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "30") && ("$BATTERY_LEVEL" -le "39") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-30-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "40") && ("$BATTERY_LEVEL" -le "49") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-40-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "50") && ("$BATTERY_LEVEL" -le "59") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-50-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "60") && ("$BATTERY_LEVEL" -le "69") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-60-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "70") && ("$BATTERY_LEVEL" -le "79") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-70-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "80") && ("$BATTERY_LEVEL" -le "89") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-80-charging-symbolic.svg'
+	elif [[ ("$BATTERY_LEVEL" -ge "90") && ("$BATTERY_LEVEL" -le "99") ]]; then
+		icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-90-charging-symbolic.svg'
+    elif [[ ("$BATTERY_LEVEL" -eq "100") ]]; then
+        icon='/usr/share/icons/ePapirus-Dark/symbolic/status/battery-level-100-charged-symbolic.svg'
+	fi
+}
+
+# Send notifications(
+notify() {
+    BATTERY_LEVEL=$(acpi -b | grep "Battery 0" | grep -P -o '[0-9]+(?=%)')
+    if [[ ("$BATTERY_CHARGING" -eq 1) && (! -f "$CHARGING_FILE") ]]; then
+        TIME_FULL=`acpi | sed 's/.* \([0-9]\+:[0-9]\+:[0-9]\+\) until charged/\1/' | awk -F: '{ printf "%dh %dm %ds until full\n", $1, $2, $3 }'`
+        get_icon && /usr/bin/notify-send "${BATTERY_LEVEL}% Charging" "${TIME_FULL}" -u normal -i "$icon" -t 5000 -r 9991
+	touch $CHARGING_FILE
+    elif [[ ("$BATTERY_CHARGING" -eq 0) && (! -f "$DISCHARGING_FILE")]]; then
+        TIME_EMPTY=`acpi | sed 's/.* \([0-9]\+:[0-9]\+:[0-9]\+\) remaining/\1/' | awk -F: '{ printf "%dh %dm %ds remaining\n", $1, $2, $3 }'`
+        get_icon && /usr/bin/notify-send -i "$icon" "Battery Unplugged at ${BATTERY_LEVEL}%" "$TIME_EMPTY" -u normal -t 5000 -r 9991
+	touch $DISCHARGING_FILE
+    fi
+}
+
+notify

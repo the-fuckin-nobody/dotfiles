@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+## Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
+##
+## Script to manage brightness on Archcraft.
+
+# Icons
+iDIR='/usr/share/icons/Fluent-dark/symbolic/status/'
+
+# Graphics card
+CARD=$(ls /sys/class/backlight | head -n 1)
+
+# Get brightness
+get_backlight() {
+	LIGHT=$(light -G | cut -d "." -f 1)
+	echo "${LIGHT}"
+}
+
+# Get icons
+get_icon() {
+	backlight="$(get_backlight)"
+	current="${backlight%%%}"
+	if [[ ("$current" -ge "0") && ("$current" -le "20") ]]; then
+		icon="$iDIR"/display-brightness-off-symbolic.svg
+	elif [[ ("$current" -ge "20") && ("$current" -le "49") ]]; then
+		icon="$iDIR"/display-brightness-low-symbolic.svg
+	elif [[ ("$current" -ge "49") && ("$current" -le "79") ]]; then
+		icon="$iDIR"/display-brightness-medium-symbolic.svg
+	elif [[ ("$current" -ge "80") && ("$current" -le "100") ]]; then
+		icon="$iDIR"/display-brightness-high-symbolic.svg
+	fi
+}
+
+# Notify
+notify_bl() {
+	get_icon && notify-send -h int:value:$(get_backlight) --replace-id=669 -u low -i "$icon" "Brightness : $(get_backlight)"
+}
+
+# Increase brightness
+inc_backlight() {
+	if [[ "$CARD" == *"intel_"* ]]; then
+		light -A 1 && notify_bl
+	else
+		xbacklight -inc 5 && notify_bl
+	fi
+}
+
+# Decrease brightness
+dec_backlight() {
+	if [[ "$CARD" == *"intel_"* ]]; then
+		light -U 1 && notify_bl
+	else
+		xbacklight -dec 5 && notify_bl
+	fi
+}
+
+# Execute accordingly
+if [[ "$1" == "--get" ]]; then
+	get_backlight
+elif [[ "$1" == "--inc" ]]; then
+	inc_backlight
+elif [[ "$1" == "--dec" ]]; then
+	dec_backlight
+else
+	get_backlight
+fi
